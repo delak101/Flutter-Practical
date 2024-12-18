@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:practical/pages/MyTransactions.dart';
-import 'package:practical/pages/PlusButton.dart';
-import 'package:practical/pages/TopNueCard.dart';
+import 'MyTransactions.dart';
+import 'PlusButton.dart';
+import 'TopNueCard.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
         'amount': amount,
         'item': item,
       });
+      
 
       // Update income or expense based on the type of transaction
       if (type == 'Income') {
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
 
         return StatefulBuilder(
           builder: (context, setState) {
-            return AlertDialog(
+          return AlertDialog(
               title: Text('New Transaction'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,

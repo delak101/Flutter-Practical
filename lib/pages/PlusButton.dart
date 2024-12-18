@@ -7,9 +7,10 @@ class PlusButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () => function(),
-      child: Container(
+      borderRadius: BorderRadius.circular(300000),
+      child: Ink(
         height: 75,
         width: 75,
         decoration: BoxDecoration(

@@ -20,30 +20,28 @@ class _SignUpPageState extends State<SignUpPage> {
     await prefs.setString('password', _passwordController.text);
   }
 
-  // Handle sign-up logic with validation
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   _signUp() {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
-    final confirmPassword = _confirmPasswordController.text.trim();
+    if (!(_formKey.currentState!.validate())) {
+      final email = _emailController.text.trim();
+      final password = _passwordController.text;
+      final confirmPassword = _confirmPasswordController.text;
 
-    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-      _showMessage("Please fill in all fields.");
-      return;
+      if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+        _showMessage("Please fill in all fields.");
+        return;
+      }
+
+      if (password != confirmPassword) {
+        _showMessage("Passwords do not match!");
+        return;
+      }
+
+      // Save data and provide success feedback
+      _saveData();
+      _showMessage("Sign up successful!");
+      // // Navigate to Login or Home page if required
     }
-
-    if (password != confirmPassword) {
-      _showMessage("Passwords do not match!");
-      return;
-    }
-
-    // Save data and provide success feedback
-    _saveData();
-    _showMessage("Sign up successful!");
-    // // Navigate to Login or Home page if required
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const LoginPage()),
-    // );
   }
 
   // Show a message using SnackBar
@@ -57,58 +55,66 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
-      child: Column(
-        children: [
-          TextFormField(
-            controller: _emailController,
-            decoration: InputDecoration(
-              labelText: "Username or Email",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-          ),
-          const SizedBox(height: 15),
-          TextFormField(
-            controller: _passwordController,
-            obscureText: true,
-            decoration: InputDecoration(
-              labelText: "Password",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-          ),
-          const SizedBox(height: 15),
-          TextFormField(
-            controller: _confirmPasswordController,
-            obscureText: true,
-            decoration: InputDecoration(
-              labelText: "Confirm Password",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-          ),
-          const SizedBox(height: 30),
-          SizedBox(
-            width: 200,
-            height: 50,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF8E8E8E),
-                shape: RoundedRectangleBorder(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            TextFormField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                labelText: "Username or Email",
+                border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              onPressed: _signUp, // Handle sign-up logic
-              child: const Text(
-                "Sign Up",
-                style: TextStyle(fontSize: 18),
+              validator: (value) => value!.isEmpty ? 'email is required' : null,
+            ),
+            const SizedBox(height: 15),
+            TextFormField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: "Password",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              validator: (value) =>
+                  value!.isEmpty ? 'Password is required' : null,
+            ),
+            const SizedBox(height: 15),
+            TextFormField(
+              controller: _confirmPasswordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: "Confirm Password",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              validator: (value) =>
+                  value!.isEmpty ? 'Password is required' : null,
+            ),
+            const SizedBox(height: 30),
+            SizedBox(
+              width: 200,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF8E8E8E),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                onPressed: _signUp, // Handle sign-up logic
+                child: const Text(
+                  "Sign Up",
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
